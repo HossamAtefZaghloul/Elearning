@@ -1,15 +1,19 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migration1739083766454 implements MigrationInterface {
-  name = 'Migration1739083766454';
+export class AddUserRoleColumn1739091949840 implements MigrationInterface {
+  name = 'AddUserRoleColumn1739091949840';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "deletedAt" TIMESTAMP WITH TIME ZONE, "email" character varying NOT NULL, "password" character varying NOT NULL, "username" character varying NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`,
+      `CREATE TYPE "public"."user_role_enum" AS ENUM('admin', 'user', 'moderator')`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "user" ADD "role" "public"."user_role_enum" NOT NULL DEFAULT 'user'`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "user"`);
+    await queryRunner.query(`ALTER TABLE "user" DROP COLUMN "role"`);
+    await queryRunner.query(`DROP TYPE "public"."user_role_enum"`);
   }
 }
