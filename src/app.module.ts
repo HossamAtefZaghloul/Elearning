@@ -19,7 +19,7 @@ import { UsersModule } from './users/users.module';
       username: process.env.DATABASE_USER || 'postgres',
       password: process.env.DATABASE_PASSWORD || 'rahhst',
       database: process.env.DATABASE_NAME || 'Elearning',
-      synchronize: false,
+      synchronize: true, /// CHANGE THIS To False BEFORE PRODUCTION**
       entities: [__dirname + '/database/core/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
     }),

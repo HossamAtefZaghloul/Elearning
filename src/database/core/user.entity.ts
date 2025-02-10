@@ -20,4 +20,7 @@ export class User extends BaseEntity {
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.STUDENT })
   role: UserRole;
+
+  @Column({ select: false, nullable: true })
+  refreshToken?: string;
 }
