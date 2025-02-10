@@ -52,7 +52,7 @@ export class AuthController {
       };
     } catch (error) {
       throw new HttpException(
-        { message: 'User creation failed', error: error.message },
+        { message: 'Login failed', error: error.message },
         HttpStatus.BAD_REQUEST,
       );
     }

@@ -38,6 +38,7 @@ export class UsersService {
     userDto: LoginUserDto,
   ): Promise<{ access_token: string; refresh_token: string }> {
     try {
+      console.log(userDto);
       const user = await this.findUser(userDto);
       const payload = { sub: user.id, username: user.name };
 
@@ -69,7 +70,9 @@ export class UsersService {
     try {
       const user = await this.usersRepository.findOne({
         where: { email: userDto.email },
+        select: ['id', 'email', 'password', 'name', 'role'],
       });
+      console.log(user);
 
       if (!user) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
