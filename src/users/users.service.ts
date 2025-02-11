@@ -92,4 +92,64 @@ export class UsersService {
       );
     }
   }
+  async handleRefreshToken(
+    refreshToken: string,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    try {
+      // Verify the refresh token
+      const payload = await this.jwtService.verifyAsync(refreshToken);
+      console.log('verifyAsync');
+      console.log(payload);
+      const user = await this.usersRepository.findOne({
+        where: { id: payload.sub },
+        select: ['id', 'name', 'refreshToken'],
+      });
+      console.log(user);
+      if (!user || !user.refreshToken) {
+        throw new HttpException(
+          'Invalid refresh token',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      // Compare (user: refresh token with) the hashed one in the DB
+      const isValid = await bcrypt.compare(refreshToken, user.refreshToken);
+      console.log('isValid :', isValid);
+      if (!isValid) {
+        throw new HttpException(
+          'Invalid refresh token',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      // generate new access token
+      const newAccessToken = await this.jwtService.signAsync(
+        { sub: user.id, username: user.name },
+        { expiresIn: '60m' },
+      );
+
+      console.log('OLD Refresh token:', user.refreshToken);
+
+      // new refresh token
+      const newRefreshToken = await this.jwtService.signAsync(
+        { sub: user.id, username: user.name },
+        { expiresIn: '7d' },
+      );
+
+      // Hash the refresh token
+      const hashedRefreshToken = await bcrypt.hash(newRefreshToken, 10);
+
+      // update token in the database
+      await this.usersRepository.update(user.id, {
+        refreshToken: hashedRefreshToken,
+      });
+
+      console.log('NEW Refresh token:', newRefreshToken);
+
+      return { access_token: newAccessToken, refresh_token: newRefreshToken };
+    } catch (error) {
+      console.error('Refresh token error:', error);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+  }
 }

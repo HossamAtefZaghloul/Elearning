@@ -18,11 +18,11 @@ export class AuthController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Post('auth/signup')
+  @Post('signup')
   async signup(@Body() UserDto: CreateUserDto) {
     try {
       const user = await this.usersService.createUser(UserDto);
-      return { message: 'User created successfully //Redirect ...!' };
+      return user && { message: 'User created successfully //Redirect ...!' };
     } catch (error) {
       throw new HttpException(
         { message: 'User creation failed', error: error.message },
@@ -42,7 +42,7 @@ export class AuthController {
       );
     }
   }
-  @Post('auth/login')
+  @Post('login')
   async login(@Body() UserDto: LoginUserDto) {
     try {
       const accessToken = await this.usersService.handleLogin(UserDto);
@@ -55,6 +55,23 @@ export class AuthController {
         { message: 'Login failed', error: error.message },
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
+  @Post('refresh-token') // send refresh-token in req-cookies
+  async refreshToken(@Body() body: { refresh_token: string }) {
+    try {
+      const refreshToken = body.refresh_token;
+
+      const newTokens =
+        await this.usersService.handleRefreshToken(refreshToken);
+
+      return {
+        accessToken: newTokens.access_token,
+        refreshToken: newTokens.refresh_token,
+        message: 'Token refreshed successfully!',
+      };
+    } catch (error) {
+      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
     }
   }
 }
