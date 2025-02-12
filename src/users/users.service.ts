@@ -152,4 +152,38 @@ export class UsersService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
   }
+  async logout(refreshToken: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(refreshToken);
+
+      const user = await this.usersRepository.findOne({
+        where: { id: payload.sub },
+        select: ['id', 'name', 'refreshToken'],
+      });
+
+      if (!user || !user.refreshToken) {
+        throw new HttpException(
+          'Invalid refresh token',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      const isValid = await bcrypt.compare(refreshToken, user.refreshToken);
+      if (!isValid) {
+        throw new HttpException(
+          'Invalid refresh token',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      await this.usersRepository.update(user.id, {
+        refreshToken: '',
+      });
+      console.log('refreshToken:', user.refreshToken);
+      return { message: 'Logged out successfully' };
+    } catch (error: any) {
+      throw new HttpException(
+        'Invalid or expired refresh token',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
 }

@@ -23,8 +23,8 @@ async function seed() {
         description: row.description,
         Price: row.price,
         status: row.status || 'active',
-        video: row.video || undefined,
-        pdf: row.pdf || undefined,
+        video: row.video || '',
+        pdf: row.pdf || '',
       });
     })
     .on('end', async () => {

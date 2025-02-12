@@ -21,8 +21,8 @@ export class AuthController {
   @Post('signup')
   async signup(@Body() UserDto: CreateUserDto) {
     try {
-      const user = await this.usersService.createUser(UserDto);
-      return user && { message: 'User created successfully //Redirect ...!' };
+      await this.usersService.createUser(UserDto);
+      return { message: 'User created successfully //Redirect ...!' };
     } catch (error) {
       throw new HttpException(
         { message: 'User creation failed', error: error.message },
@@ -71,7 +71,24 @@ export class AuthController {
         message: 'Token refreshed successfully!',
       };
     } catch (error) {
-      throw new HttpException('Invalid refresh token', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        { message: 'Invalid refresh token', error: error.message },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
+  @Post('logout')
+  async logout(@Body() body: { refresh_token: string }) {
+    try {
+      console.log(body.refresh_token);
+      await this.usersService.logout(body.refresh_token);
+
+      return { message: 'Logged out successfully' };
+    } catch (error) {
+      throw new HttpException(
+        { message: 'Invalid refresh token', error: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
