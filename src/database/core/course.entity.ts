@@ -10,11 +10,11 @@ export class Course extends BaseEntity {
   @Column()
   description: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  Price: string;
+  @Column()
+  category: string;
 
-  @Column({ default: 'active' })
-  status: string;
+  @Column({ type: 'decimal' }) // Ensure it's a number type
+  price: number;
 
   @Column({ nullable: true })
   video: string;

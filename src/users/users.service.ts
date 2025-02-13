@@ -6,8 +6,8 @@ import * as bcrypt from 'bcrypt';
 import { config } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 // ** DTO ** \\
-import { CreateUserDto } from './Dto/create-user.dto.ts';
-import { LoginUserDto } from './Dto/login-user.dto.ts.js';
+import { CreateUserDto } from './Dto/create-user.dto';
+import { LoginUserDto } from './Dto/login-user.dto';
 
 config();
 
@@ -147,7 +147,7 @@ export class UsersService {
       console.log('NEW Refresh token:', newRefreshToken);
 
       return { access_token: newAccessToken, refresh_token: newRefreshToken };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Refresh token error:', error);
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
@@ -180,6 +180,7 @@ export class UsersService {
       console.log('refreshToken:', user.refreshToken);
       return { message: 'Logged out successfully' };
     } catch (error: any) {
+      console.log(error);
       throw new HttpException(
         'Invalid or expired refresh token',
         HttpStatus.UNAUTHORIZED,

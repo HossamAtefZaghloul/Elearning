@@ -5,18 +5,14 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
-import { CreateUserDto } from 'src/users/Dto/create-user.dto.ts';
-import { LoginUserDto } from 'src/users/Dto/login-user.dto.ts';
-import { EmailDto } from 'src/users/Dto/email.dto.ts';
+import { CreateUserDto } from 'src/users/Dto/create-user.dto';
+import { LoginUserDto } from 'src/users/Dto/login-user.dto';
+import { EmailDto } from 'src/users/Dto/email.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Post('signup')
   async signup(@Body() UserDto: CreateUserDto) {
@@ -57,10 +53,10 @@ export class AuthController {
       );
     }
   }
-  @Post('refresh-token') // send refresh-token in req-cookies
-  async refreshToken(@Body() body: { refresh_token: string }) {
+  @Post('refresh-token') // send refresh-token in req-cookies :<
+  async refreshToken(@Body() cookies: { refresh_token: string }) {
     try {
-      const refreshToken = body.refresh_token;
+      const refreshToken = cookies.refresh_token;
 
       const newTokens =
         await this.usersService.handleRefreshToken(refreshToken);

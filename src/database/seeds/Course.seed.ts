@@ -5,11 +5,12 @@ import * as csvParser from 'csv-parser';
 import { AppDataSource } from '../../config/typeorm.config';
 import { Course } from '../core/course.entity';
 import { Repository } from 'typeorm';
+import { CreateCourseDto } from '../../courses/Dto/create-courses.dto';
 
 async function seed() {
   await AppDataSource.initialize();
   console.log('Database connection established');
-  const courses: Partial<Course>[] = []; // add course dto later :3
+  const courses: CreateCourseDto[] = []; // add course dto later :3
 
   // Read CSV file using stream + pipe
   createReadStream('./src/database/seeds/data-csv/fake-courses.csv')
@@ -21,8 +22,7 @@ async function seed() {
       courses.push({
         title: row.title,
         description: row.description,
-        Price: row.price,
-        status: row.status || 'active',
+        price: Number(row.price),
         video: row.video || '',
         pdf: row.pdf || '',
       });
