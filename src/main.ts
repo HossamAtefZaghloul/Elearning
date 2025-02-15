@@ -21,7 +21,7 @@ async function bootstrap() {
   );
   app.use(helmet());
   // Global-Pipes: enables strict ((DTO)) validation and transformation
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   await app.listen(process.env.PORT ?? 3005);
   console.log('Startedddd');
 }

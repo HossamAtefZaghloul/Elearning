@@ -41,7 +41,7 @@ export class CoursesService {
       ]);
     try {
       if (filters.category) {
-        query.andWhere('course.category = :category', {
+        query.andWhere('Course.category = :category', {
           category: filters.category,
         });
       }
@@ -55,11 +55,11 @@ export class CoursesService {
     }
   }
   async getUserCourses(id: string) {
+    console.log(id);
     const userCourses = await this.studentCourseRepository.find({
       where: { student: { id } },
       relations: ['course'],
     });
-    console.log(userCourses);
     return userCourses;
   }
 }

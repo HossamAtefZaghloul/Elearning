@@ -9,6 +9,7 @@ import { CoursesModule } from './Modules/courses/courses.module';
 import { CoreModule } from './Modules/core-module/core-module.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { PaymentModule } from './Modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { join } from 'path';
     UsersModule,
     CoursesModule,
     CoreModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

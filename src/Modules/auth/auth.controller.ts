@@ -15,42 +15,47 @@ export class AuthController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('signup')
-  async signup(@Body() UserDto: CreateUserDto) {
+  async signup(@Body() userDto: CreateUserDto) {
     try {
-      await this.usersService.createUser(UserDto);
+      await this.usersService.createUser(userDto);
       return { message: 'User created successfully //Redirect ...!' };
-    } catch (error) {
+    } catch (error: any) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
       throw new HttpException(
-        { message: 'User creation failed', error: error.message },
-        HttpStatus.BAD_REQUEST,
+        '  User creation failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-
   @Post('password-reset')
   resetPass(@Body() email: EmailDto) {
     try {
       console.log(email);
-    } catch (error) {
+    } catch (error: any) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
       throw new HttpException(
-        { message: 'Password reset failed', error: error.message },
-        HttpStatus.BAD_REQUEST,
+        'Password reset failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
   @Post('login')
-  async login(@Body() UserDto: LoginUserDto) {
+  async login(@Body() userDto: LoginUserDto) {
     try {
-      const accessToken = await this.usersService.handleLogin(UserDto);
+      const accessToken = await this.usersService.handleLogin(userDto);
       return {
         accessToken,
         message: 'login successfully //Redirect ...!',
       };
-    } catch (error) {
-      throw new HttpException(
-        { message: 'Login failed', error: error.message },
-        HttpStatus.BAD_REQUEST,
-      );
+    } catch (error: any) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException('Login failed', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
   @Post('refresh-token') // send refresh-token in req-cookies :<
@@ -66,10 +71,13 @@ export class AuthController {
         refreshToken: newTokens.refresh_token,
         message: 'Token refreshed successfully!',
       };
-    } catch (error) {
+    } catch (error: any) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
       throw new HttpException(
-        { message: 'Invalid refresh token', error: error.message },
-        HttpStatus.UNAUTHORIZED,
+        'Invalid refresh token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -80,9 +88,12 @@ export class AuthController {
       await this.usersService.logout(body.refresh_token);
 
       return { message: 'Logged out successfully' };
-    } catch (error) {
+    } catch (error: any) {
+      if (error instanceof Error) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      }
       throw new HttpException(
-        { message: 'Invalid refresh token', error: error.message },
+        'Invalid refresh token',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
