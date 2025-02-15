@@ -19,9 +19,9 @@ export class CreateCourseDto {
 
   @IsString()
   @IsOptional()
-  video?: string;
+  videoPath?: string;
 
   @IsString()
   @IsOptional()
-  pdf?: string;
+  pdfPath?: string;
 }

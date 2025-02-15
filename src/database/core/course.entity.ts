@@ -13,14 +13,17 @@ export class Course extends BaseEntity {
   @Column()
   category: string;
 
-  @Column({ type: 'decimal' }) // Ensure it's a number type
+  @Column({ type: 'decimal' })
   price: number;
 
-  @Column({ nullable: true })
-  video: string;
+  @Column({ type: 'boolean', default: false })
+  isPurchased: boolean;
 
   @Column({ nullable: true })
-  pdf: string;
+  pdfPath: string;
+
+  @Column({ nullable: true })
+  videoPath: string;
 
   @OneToMany(() => StudentCourse, (studentCourse) => studentCourse.course)
   studentCourses: StudentCourse[];

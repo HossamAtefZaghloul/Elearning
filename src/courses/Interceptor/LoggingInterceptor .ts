@@ -17,7 +17,6 @@ export class LoggingInterceptor implements NestInterceptor {
     // Extract uploaded file(s)
     const file = request.file;
     const files = request.files;
-
     if (file) {
       console.log(
         `Uploaded file: ${file.originalname}, Size: ${file.size} bytes`,

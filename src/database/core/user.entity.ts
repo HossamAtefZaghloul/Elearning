@@ -26,6 +26,6 @@ export class User extends BaseEntity {
   @OneToMany(() => StudentCourse, (studentCourse) => studentCourse.student)
   studentCourses: StudentCourse[];
 
-  @Column({ select: false })
-  refreshToken: string;
+  @Column({ select: false, nullable: true })
+  refreshToken?: string;
 }

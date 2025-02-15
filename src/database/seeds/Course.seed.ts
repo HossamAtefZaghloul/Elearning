@@ -23,8 +23,8 @@ async function seed() {
         title: row.title,
         description: row.description,
         price: Number(row.price),
-        video: row.video || '',
-        pdf: row.pdf || '',
+        videoPath: row.video || '',
+        pdfPath: row.pdf || '',
       });
     })
     .on('end', async () => {
