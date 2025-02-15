@@ -18,7 +18,7 @@ export class Payments extends BaseEntity {
   course: Course;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number;
+  price: number;
 
   @Column({
     type: 'enum',
