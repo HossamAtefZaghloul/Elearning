@@ -1,6 +1,7 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { StudentCourse } from './student-course.entity';
+import { Payments } from './payment.entity';
 
 @Entity()
 export class Course extends BaseEntity {
@@ -24,6 +25,9 @@ export class Course extends BaseEntity {
 
   @Column({ nullable: true })
   videoPath: string;
+
+  @OneToMany(() => Payments, (payments) => payments.course)
+  payments: Payments[];
 
   @OneToMany(() => StudentCourse, (studentCourse) => studentCourse.course)
   studentCourses: StudentCourse[];

@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from 'src/database/core/course.entity';
 import { Payments, PaymentStatus } from 'src/database/core/payment.entity';
+import { StudentCourse } from 'src/database/core/student-course.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,11 +17,12 @@ export class PaymentService {
     private readonly coursesRepository: Repository<Course>,
     @InjectRepository(Payments)
     private readonly paymentsRepository: Repository<Payments>,
+    @InjectRepository(StudentCourse)
+    private readonly studentCourseRepository: Repository<StudentCourse>,
   ) {}
 
   async paymentMethod(userId: string, courseId: string) {
     try {
-      // mocking payment method ????!
       console.log(userId, courseId);
       const course = await this.coursesRepository.findOne({
         where: { id: courseId },
@@ -30,6 +32,10 @@ export class PaymentService {
       if (course === null) {
         throw new Error('Course not found');
       }
+
+      // mocking payment method here ..
+
+      // then
       const payment = this.paymentsRepository.create({
         student: { id: userId },
         course: { id: courseId },
@@ -37,7 +43,16 @@ export class PaymentService {
         status: PaymentStatus.COMPLETED,
       });
 
-      return await this.paymentsRepository.save(payment);
+      await this.paymentsRepository.save(payment);
+
+      const studentCourse = this.studentCourseRepository.create({
+        student: { id: userId },
+        course: { id: courseId },
+      });
+
+      await this.studentCourseRepository.save(studentCourse);
+
+      return studentCourse;
     } catch (error) {
       if (error instanceof Error) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

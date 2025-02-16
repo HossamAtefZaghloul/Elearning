@@ -12,10 +12,10 @@ export enum PaymentStatus {
 @Entity()
 @Unique(['student', 'course'])
 export class Payments extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.studentCourses)
+  @ManyToOne(() => User, (user) => user.payments)
   student: User;
 
-  @ManyToOne(() => Course, (course) => course.studentCourses)
+  @ManyToOne(() => Course, (course) => course.payments)
   course: Course;
 
   @Column('decimal', { precision: 10, scale: 2 })

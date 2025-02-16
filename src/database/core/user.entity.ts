@@ -1,6 +1,7 @@
 import { Entity, Column, Index, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { StudentCourse } from './student-course.entity';
+import { Payments } from './payment.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -25,6 +26,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => StudentCourse, (studentCourse) => studentCourse.student)
   studentCourses: StudentCourse[];
+
+  @OneToMany(() => Payments, (payments) => payments.student)
+  payments: Payments[];
 
   @Column({ select: false, nullable: true })
   refreshToken?: string;
