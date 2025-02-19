@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from '../../database/core/user.entity';
+import { User } from '../../database/core/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 // ** DTO ** \\
 import { CreateUserDto } from './Dto/create-user.dto';
 import { LoginUserDto } from './Dto/login-user.dto';
+import { JwtPayloadInterface } from './interface';
 
 config();
 
@@ -97,7 +98,8 @@ export class UsersService {
   ): Promise<{ access_token: string; refresh_token: string }> {
     try {
       // Verify the refresh token
-      const payload = await this.jwtService.verifyAsync(refreshToken);
+      const payload: JwtPayloadInterface =
+        await this.jwtService.verifyAsync(refreshToken);
       console.log('verifyAsync');
       console.log(payload);
       const user = await this.usersRepository.findOne({
@@ -154,7 +156,8 @@ export class UsersService {
   }
   async logout(refreshToken: string) {
     try {
-      const payload = await this.jwtService.verifyAsync(refreshToken);
+      const payload: JwtPayloadInterface =
+        await this.jwtService.verifyAsync(refreshToken);
 
       const user = await this.usersRepository.findOne({
         where: { id: payload.sub },

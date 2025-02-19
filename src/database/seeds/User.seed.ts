@@ -2,7 +2,7 @@ import { createReadStream } from 'fs';
 import * as csvParser from 'csv-parser';
 import * as bcrypt from 'bcrypt';
 import { AppDataSource } from '../../config/typeorm.config';
-import { User, UserRole } from '../core/user.entity';
+import { User, UserRole } from '../core/entities/user.entity';
 
 async function seed() {
   await AppDataSource.initialize();

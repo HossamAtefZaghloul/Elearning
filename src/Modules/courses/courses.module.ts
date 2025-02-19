@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CoursesController } from './courses.controller';
 import { CoursesService } from './courses.service';
-import { Course } from 'src/database/core/course.entity';
+import { Course } from 'src/database/core/entities/course.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/Modules/auth/auth.module';
 import { CoreModule } from 'src/Modules/core-module/core-module.module';
-import { StudentCourse } from 'src/database/core/student-course.entity';
-import { User } from 'src/database/core/user.entity';
+import { StudentCourse } from 'src/database/core/entities/student-course.entity';
+import { User } from 'src/database/core/entities/user.entity';
 import { RolesGuard } from 'src/Guards/roles.guard';
 import { PaymentModule } from '../payment/payment.module';
 

@@ -5,9 +5,9 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course } from 'src/database/core/course.entity';
-import { Payments, PaymentStatus } from 'src/database/core/payment.entity';
-import { StudentCourse } from 'src/database/core/student-course.entity';
+import { Course } from 'src/database/core/entities/course.entity';
+import { Payments, PaymentStatus } from 'src/database/core/entities/payment.entity';
+import { StudentCourse } from 'src/database/core/entities/student-course.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

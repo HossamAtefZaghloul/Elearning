@@ -3,7 +3,7 @@
 import { createReadStream } from 'fs';
 import * as csvParser from 'csv-parser';
 import { AppDataSource } from '../../config/typeorm.config';
-import { Course } from '../core/course.entity';
+import { Course } from '../core/entities/course.entity';
 import { Repository } from 'typeorm';
 import { CreateCourseDto } from '../../Modules/courses/Dto/create-courses.dto';
 

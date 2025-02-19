@@ -5,10 +5,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { CreateCourseDto } from './Dto/create-courses.dto';
-import { Course } from '../../database/core/course.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { StudentCourse } from 'src/database/core/student-course.entity';
+import { Course } from 'src/database/core/entities/course.entity';
+import { StudentCourse } from 'src/database/core/entities/student-course.entity';
 @Injectable()
 export class CoursesService {
   constructor(

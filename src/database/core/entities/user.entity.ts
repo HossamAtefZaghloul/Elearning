@@ -1,7 +1,15 @@
-import { Entity, Column, Index, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  Index,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { StudentCourse } from './student-course.entity';
 import { Payments } from './payment.entity';
+import { UserProfile } from './user-profile.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -32,4 +40,8 @@ export class User extends BaseEntity {
 
   @Column({ select: false, nullable: true })
   refreshToken?: string;
+
+  @OneToOne(() => UserProfile, (profile) => profile.user, { cascade: true })
+  @JoinColumn()
+  profile: UserProfile;
 }
